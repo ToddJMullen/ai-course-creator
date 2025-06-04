@@ -6,6 +6,10 @@ import {
   HiMiniSquares2X2,
 } from "react-icons/hi2";
 import { Button } from "@/components/ui/button";
+import SelectCategory from "./_components/SelectCategory";
+import TopicDescription from "./_components/TopicDescription";
+import SelectOption from "./_components/SelectOption";
+import LoadingDialog from "./_components/LoadingDialog";
 
 function CreateCourse() {
   const StepperOptions = [
@@ -22,12 +26,13 @@ function CreateCourse() {
         <h2 className="text-4xl text-primary font-medium">Create Course</h2>
         <div className="flex mt-10">
           {StepperOptions.map((item, idx) => (
-            <div className="flex items-center">
+            <div className="flex items-center" key={idx}>
               <div className="flex flex-col items-center w-[50px] md:w-[100px] ">
                 <div
                   className={`bg-gray-200 p-3 rounded-full text-white ${
                     activeIndex >= idx && "bg-primary"
                   }`}
+                  onClick={() => setActiveIndex(idx)}
                 >
                   {item.icon}
                 </div>
@@ -46,6 +51,10 @@ function CreateCourse() {
       </div>
       <div className="px-10 md:px-20 lg:px-44">
         {/* Components */}
+        {activeIndex === 0 && <SelectCategory />}
+        {activeIndex === 1 && <TopicDescription />}
+        {activeIndex === 2 && <SelectOption />}
+        <LoadingDialog loading={false} />
         {/* next/previous */}
         <div className="flex justify-between mt-10">
           <Button
