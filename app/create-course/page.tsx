@@ -1,5 +1,6 @@
 "use client";
 import React, { useContext, useEffect, useState } from "react";
+import { GenerateCourseLayout_AI } from "@/configs/AiModel";
 import {
   HiClipboardDocumentCheck,
   HiLightBulb,
@@ -20,6 +21,7 @@ function CreateCourse() {
   ];
   const { userCourseInput, setUserCourseInput } = useContext(UserInputContext);
 
+  const [loading, setLoading] = useState(false);
   const [activeIndex, setActiveIndex] = useState(0);
 
   useEffect(() => {
@@ -60,6 +62,36 @@ function CreateCourse() {
     return false;
   };
 
+  const GenerateCourseLayout = async () => {
+    const BASIC_PROMPT =
+      "Generate A Course Tutorial on Following Detail With field as Course Name, Description, Along with Chapter Name, about, Duration: ";
+
+    const USER_INPUT_PROMPT =
+      "Category: " +
+      userCourseInput?.category +
+      ", Topic: " +
+      userCourseInput?.topic +
+      ", Sub-Topic: " +
+      userCourseInput?.description +
+      ", Level:" +
+      userCourseInput?.level +
+      ", Duration:" +
+      userCourseInput?.duration +
+      ", NoOf Chapters:" +
+      userCourseInput?.noOfChapter +
+      " , in JSON format";
+
+    const FINAL_PROMPT = BASIC_PROMPT + USER_INPUT_PROMPT;
+
+    console.log(FINAL_PROMPT);
+    setLoading(true);
+    const result = await GenerateCourseLayout_AI.sendMessage(FINAL_PROMPT);
+    const rsp = result.response?.text();
+    const json = JSON.parse(rsp);
+    console.log("result/", rsp, json);
+    setLoading(false);
+  };
+
   return (
     <div>
       {/* stepper */}
@@ -95,7 +127,7 @@ function CreateCourse() {
         {activeIndex === 0 && <SelectCategory />}
         {activeIndex === 1 && <TopicDescription />}
         {activeIndex === 2 && <SelectOption />}
-        <LoadingDialog loading={false} />
+        <LoadingDialog loading={loading} />
         {/* next/previous */}
         <div className="flex justify-between mt-10">
           <Button
@@ -123,8 +155,8 @@ function CreateCourse() {
               className=""
               size="default"
               variant="default"
-              disabled={checkStatus()}
-              onClick={() => setActiveIndex(activeIndex + 1)}
+              disabled={checkStatus() || loading}
+              onClick={() => GenerateCourseLayout()}
             >
               Generate Course Layout
             </Button>
