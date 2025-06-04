@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import {
   HiClipboardDocumentCheck,
   HiLightBulb,
@@ -10,6 +10,7 @@ import SelectCategory from "./_components/SelectCategory";
 import TopicDescription from "./_components/TopicDescription";
 import SelectOption from "./_components/SelectOption";
 import LoadingDialog from "./_components/LoadingDialog";
+import { UserInputContext } from "../_context/UserInputContext";
 
 function CreateCourse() {
   const StepperOptions = [
@@ -17,8 +18,14 @@ function CreateCourse() {
     { id: 2, name: "Topic & Desc", icon: <HiLightBulb /> },
     { id: 3, name: "Options", icon: <HiClipboardDocumentCheck /> },
   ];
+  const { userCourseInput, setUserCourseInput } = useContext(UserInputContext);
 
   const [activeIndex, setActiveIndex] = useState(0);
+
+  useEffect(() => {
+    console.log("userCourseInput changed/", userCourseInput);
+  }, [userCourseInput]);
+
   return (
     <div>
       {/* stepper */}

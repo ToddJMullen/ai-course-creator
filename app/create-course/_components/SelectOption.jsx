@@ -9,7 +9,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { UserInputContext } from "@/app/_context/UserInputContext";
 function SelectOption() {
-  //   const { userCourseInput, setUserCourseInput } = useContext(UserInputContext);
+  const { userCourseInput, setUserCourseInput } = useContext(UserInputContext);
 
   const handleInputChange = (fieldName, value) => {
     setUserCourseInput((prev) => ({
@@ -25,8 +25,7 @@ function SelectOption() {
           <label className="text-sm">🎓 Difficulty Level</label>
           <Select
             onValueChange={(value) => handleInputChange("level", value)}
-            // defaultValue={userCourseInput?.level}>
-            defaultValue={"level"}
+            defaultValue={userCourseInput?.level}
           >
             <SelectTrigger className="h-14 text-lg">
               <SelectValue placeholder="Select" />
@@ -41,8 +40,8 @@ function SelectOption() {
         <div>
           <label className="text-sm">🕒 Course Duration</label>
           <Select
-            // defaultValue={userCourseInput?.duration}
-            defaultValue={"duration"}
+            defaultValue={userCourseInput?.duration}
+            // defaultValue={"duration"}
             onValueChange={(value) => handleInputChange("duration", value)}
           >
             <SelectTrigger className="h-14 text-lg">
@@ -60,8 +59,8 @@ function SelectOption() {
         <div>
           <label className="text-sm">▶️ Add Video</label>
           <Select
-            // defaultValue={userCourseInput?.displayVideo}
-            defaultValue={"displayVideo"}
+            defaultValue={userCourseInput?.displayVideo}
+            // defaultValue={"displayVideo"}
             onValueChange={(value) => handleInputChange("displayVideo", value)}
           >
             <SelectTrigger className="h-14 text-lg">
@@ -78,8 +77,8 @@ function SelectOption() {
           <Input
             type="number"
             className="h-14 text-lg"
-            // defaultValue={userCourseInput?.noOfChapter}
-            defaultValue={"noOfChapter"}
+            defaultValue={userCourseInput?.noOfChapter}
+            // defaultValue={"noOfChapter"}
             onChange={(event) =>
               handleInputChange("noOfChapter", event.target.value)
             }

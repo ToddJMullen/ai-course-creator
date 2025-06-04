@@ -4,7 +4,7 @@ import { Textarea } from "@/components/ui/textarea";
 import React, { useContext } from "react";
 
 function TopicDescription() {
-  // const {userCourseInput,setUserCourseInput}=useContext(UserInputContext);
+  const { userCourseInput, setUserCourseInput } = useContext(UserInputContext);
 
   const handleInputChange = (fieldName, value) => {
     setUserCourseInput((prev) => ({
@@ -23,8 +23,8 @@ function TopicDescription() {
         <Input
           placeholder={"Topic"}
           className="h-14 text-xl"
-          //   defaultValue={userCourseInput?.topic}
-          defaultValue={"topic"}
+          defaultValue={userCourseInput?.topic}
+          // defaultValue={"topic"}
           onChange={(e) => handleInputChange("topic", e.target.value)}
         />
       </div>
@@ -36,8 +36,8 @@ function TopicDescription() {
         <Textarea
           placeholder="About your course"
           className="h-24 text-xl"
-          //   defaultValue={userCourseInput?.description}
-          defaultValue={"description"}
+          defaultValue={userCourseInput?.description}
+          // defaultValue={"description"}
           onChange={(e) => handleInputChange("description", e.target.value)}
         />
       </div>
