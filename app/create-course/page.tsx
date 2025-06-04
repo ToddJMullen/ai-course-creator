@@ -26,6 +26,40 @@ function CreateCourse() {
     console.log("userCourseInput changed/", userCourseInput);
   }, [userCourseInput]);
 
+  /**
+   * Checks required selections required for next step
+   * @returns boolean
+   */
+  const checkStatus = () => {
+    // check if nothing is selected
+    if (userCourseInput?.length == 0) {
+      return true;
+    }
+    if (
+      activeIndex == 0 &&
+      (userCourseInput?.category?.length == 0 ||
+        userCourseInput?.category == undefined)
+    ) {
+      return true;
+    }
+    if (
+      activeIndex == 1 &&
+      (userCourseInput?.topic?.length == 0 ||
+        userCourseInput?.topic == undefined)
+    ) {
+      return true;
+    } else if (
+      activeIndex == 2 &&
+      (userCourseInput?.level == undefined ||
+        userCourseInput?.duration == undefined ||
+        userCourseInput?.displayVideo == undefined ||
+        userCourseInput?.noOfChapter == undefined)
+    ) {
+      return true;
+    }
+    return false;
+  };
+
   return (
     <div>
       {/* stepper */}
@@ -78,7 +112,7 @@ function CreateCourse() {
               className=""
               size="default"
               variant="default"
-              disabled={activeIndex === StepperOptions.length - 1}
+              disabled={checkStatus()}
               onClick={() => setActiveIndex(activeIndex + 1)}
             >
               Next
@@ -89,6 +123,7 @@ function CreateCourse() {
               className=""
               size="default"
               variant="default"
+              disabled={checkStatus()}
               onClick={() => setActiveIndex(activeIndex + 1)}
             >
               Generate Course Layout
