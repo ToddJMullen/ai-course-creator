@@ -85,11 +85,13 @@ function CreateCourse() {
 
     console.log(FINAL_PROMPT);
     setLoading(true);
-    const result = await GenerateCourseLayout_AI.sendMessage(FINAL_PROMPT);
-    const rsp = result.response?.text();
-    const json = JSON.parse(rsp);
-    console.log("result/", rsp, json);
-    setLoading(false);
+    // const result = await GenerateCourseLayout_AI.sendMessage(FINAL_PROMPT);
+    // const rsp = result.response?.text();
+    // const json = JSON.parse(rsp);
+    // console.log("result/", rsp, json);
+    setTimeout(() => {
+      setLoading(false);
+    }, 3000);
   };
 
   return (
@@ -127,7 +129,6 @@ function CreateCourse() {
         {activeIndex === 0 && <SelectCategory />}
         {activeIndex === 1 && <TopicDescription />}
         {activeIndex === 2 && <SelectOption />}
-        <LoadingDialog loading={loading} />
         {/* next/previous */}
         <div className="flex justify-between mt-10">
           <Button
@@ -162,6 +163,7 @@ function CreateCourse() {
             </Button>
           )}
         </div>
+        <LoadingDialog loading={loading} />
       </div>
     </div>
   );

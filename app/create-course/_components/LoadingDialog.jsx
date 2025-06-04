@@ -1,34 +1,46 @@
-import React from 'react'
+import React from "react";
 import {
-    AlertDialog,
-    AlertDialogAction,
-    AlertDialogCancel,
-    AlertDialogContent,
-    AlertDialogDescription,
-    AlertDialogFooter,
-    AlertDialogHeader,
-    AlertDialogTitle,
-    AlertDialogTrigger,
-  } from "@/components/ui/alert-dialog"
-import Image from 'next/image'
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
+import Image from "next/image";
 
-  
-function LoadingDialog({loading}) {
+function LoadingDialog({ loading }) {
+  const loaders = [
+    <Image src={"/loader.gif"} width={100} height={100} alt="Loading..." />,
+    <Image src={"/ai-loader.gif"} width={100} height={100} alt="Loading..." />,
+    <Image
+      src={"/list-loader.gif"}
+      width={100}
+      height={100}
+      alt="Loading..."
+    />,
+  ];
+
+  const loader = loaders[Math.floor(Math.random() * loaders.length)];
+
   return (
     <AlertDialog open={loading}>
-  <AlertDialogContent>
-    <AlertDialogHeader>
-      <AlertDialogDescription>
-        <div className='flex flex-col items-center py-10'>
-            <Image src={'/loader.gif'} width={100} height={100} />
-            <h2>Please wait... Ai Working on your course</h2>
-        </div>
-      </AlertDialogDescription>
-    </AlertDialogHeader>
-  </AlertDialogContent>
-</AlertDialog>
-
-  )
+      <AlertDialogTitle>Loading...</AlertDialogTitle>
+      <AlertDialogContent>
+        <AlertDialogHeader>
+          <AlertDialogDescription>
+            <div className="flex flex-col items-center py-10">
+              {loader}
+              <h2>Please wait... Ai Working on your course</h2>
+            </div>
+          </AlertDialogDescription>
+        </AlertDialogHeader>
+      </AlertDialogContent>
+    </AlertDialog>
+  );
 }
 
-export default LoadingDialog
+export default LoadingDialog;
