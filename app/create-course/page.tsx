@@ -6,12 +6,17 @@ import {
   HiLightBulb,
   HiMiniSquares2X2,
 } from "react-icons/hi2";
+import { db } from "@/configs/db";
+import { CourseList } from "@/configs/schema";
+import uuid4 from "uuid4";
 import { Button } from "@/components/ui/button";
 import SelectCategory from "./_components/SelectCategory";
 import TopicDescription from "./_components/TopicDescription";
 import SelectOption from "./_components/SelectOption";
 import LoadingDialog from "./_components/LoadingDialog";
 import { UserInputContext } from "../_context/UserInputContext";
+import { useUser } from "@clerk/nextjs";
+import { useRouter } from "next/navigation";
 
 function CreateCourse() {
   const StepperOptions = [
@@ -19,6 +24,9 @@ function CreateCourse() {
     { id: 2, name: "Topic & Desc", icon: <HiLightBulb /> },
     { id: 3, name: "Options", icon: <HiClipboardDocumentCheck /> },
   ];
+  const user = useUser();
+  const router = useRouter();
+  console.log("user", user);
   const { userCourseInput, setUserCourseInput } = useContext(UserInputContext);
 
   const [loading, setLoading] = useState(false);
@@ -85,13 +93,34 @@ function CreateCourse() {
 
     console.log(FINAL_PROMPT);
     setLoading(true);
-    // const result = await GenerateCourseLayout_AI.sendMessage(FINAL_PROMPT);
-    // const rsp = result.response?.text();
-    // const json = JSON.parse(rsp);
-    // console.log("result/", rsp, json);
-    setTimeout(() => {
-      setLoading(false);
-    }, 3000);
+    const result = await GenerateCourseLayout_AI.sendMessage(FINAL_PROMPT);
+    const rsp = result.response?.text();
+    const json = JSON.parse(rsp);
+    SaveCourseLayoutInDb(json);
+    console.log("result/", rsp, json);
+    // setTimeout(() => {
+    setLoading(false);
+    // }, 3000);
+  };
+
+  const SaveCourseLayoutInDb = async (courseLayout) => {
+    var id = uuid4(); //Course Id
+    setLoading(true);
+    console.log("SaveCourseLayoutInDb/", { user, courseLayout });
+    const result = await db.insert(CourseList).values({
+      courseId: id,
+      name: userCourseInput?.topic,
+      level: userCourseInput?.level,
+      category: userCourseInput?.category,
+      courseOutput: courseLayout,
+      createdBy: user?.user?.primaryEmailAddress?.emailAddress,
+      userName: user?.user?.fullName,
+      userProfileImage: user?.user?.imageUrl,
+    });
+
+    setLoading(false);
+    console.log("SaveCourseLayoutInDb/forwarding/");
+    router.replace("/create-course/" + id);
   };
 
   return (
