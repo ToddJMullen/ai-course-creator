@@ -27,6 +27,7 @@ export default function RootLayout({ children }) {
     <html lang="en">
       <ClerkProvider>
         <body
+          suppressHydrationWarning
           className={`${alumniSans.variable} ${geistMono.variable} antialiased`}
         >
           <GoogleOneTap />
