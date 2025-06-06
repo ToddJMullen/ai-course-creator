@@ -10,15 +10,24 @@ import { db } from "@/configs/db";
 import { CourseList } from "@/configs/schema";
 import { eq } from "drizzle-orm";
 import Link from "next/link";
+import { useUser } from "@clerk/nextjs";
+
 function CourseBasicInfo({ course, refreshData, edit = true }) {
-  // console.log("CourseBasicInfo/", { course });
+  const user = useUser();
   const [selectedFile, setSelectedFile] = useState();
+  const [userIsCreator, setUserIsCreator] = useState();
+  console.log("CourseBasicInfo/", { course, user });
 
   useEffect(() => {
     if (course) {
       setSelectedFile(course?.courseBanner);
+      if (user) {
+        setUserIsCreator(
+          user?.user?.primaryEmailAddress.emailAddress === course?.createdBy
+        );
+      }
     }
-  }, [course]);
+  }, [course, user]);
 
   /**
    * Select file and UPload to Firebase Storage
@@ -54,12 +63,13 @@ function CourseBasicInfo({ course, refreshData, edit = true }) {
         <div>
           <h2 className="font-bold text-3xl">
             {course?.courseOutput?.course?.name}
-            {edit && (
-              <EditCourseBasicInfo
-                course={course}
-                refreshData={() => refreshData(true)}
-              />
-            )}{" "}
+            {edit ||
+              (userIsCreator && (
+                <EditCourseBasicInfo
+                  course={course}
+                  refreshData={() => refreshData(true)}
+                />
+              ))}{" "}
           </h2>
           <p className="text-sm text-gray-400 mt-3 ">
             {course?.courseOutput?.course?.description}
@@ -86,14 +96,15 @@ function CourseBasicInfo({ course, refreshData, edit = true }) {
               }`}
             />
           </label>
-          {edit && (
-            <input
-              type="file"
-              id="upload-image"
-              className="opacity-0"
-              onChange={onFileSelected}
-            />
-          )}
+          {edit ||
+            (userIsCreator && (
+              <input
+                type="file"
+                id="upload-image"
+                className="opacity-0"
+                onChange={onFileSelected}
+              />
+            ))}
         </div>
       </div>
     </div>
