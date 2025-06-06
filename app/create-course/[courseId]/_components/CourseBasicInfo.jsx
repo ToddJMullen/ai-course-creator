@@ -81,7 +81,9 @@ function CourseBasicInfo({ course, refreshData, edit = true }) {
               src={selectedFile ? selectedFile : "/placeholder.png"}
               width={300}
               height={300}
-              className="w-full rounded-xl h-[250px] object-cover cursor-pointer"
+              className={`w-full rounded-xl h-[250px] object-cover ${
+                edit && "cursor-pointer"
+              }`}
             />
           </label>
           {edit && (

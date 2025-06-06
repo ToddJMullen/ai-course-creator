@@ -22,11 +22,11 @@ function CourseLayout({ params }) {
 
   useEffect(() => {
     console.log({ courseId });
-    courseId && user && GetCourse();
+    courseId && user && GetCourses();
   }, [courseId, user]);
 
-  const GetCourse = async () => {
-    console.log("GetCourse/", { courseId, user });
+  const GetCourses = async () => {
+    console.log("GetCourses/", { courseId, user });
     const result = await db
       .select()
       .from(CourseList)
@@ -100,11 +100,11 @@ function CourseLayout({ params }) {
 
       <LoadingDialog loading={loading} />
       {/* Basic Info  */}
-      <CourseBasicInfo course={course} refreshData={() => GetCourse()} />
+      <CourseBasicInfo course={course} refreshData={() => GetCourses()} />
       {/* Course Detail  */}
       <CourseDetail course={course} />
       {/* List of Lesson  */}
-      <ChapterList course={course} refreshData={() => GetCourse()} />
+      <ChapterList course={course} refreshData={() => GetCourses()} />
 
       <Button onClick={GenerateChapterContent} className="my-10">
         Generate Course Content
