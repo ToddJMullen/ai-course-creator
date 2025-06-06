@@ -48,25 +48,25 @@ function EditCourseBasicInfo({ course, refreshData }) {
         <DialogHeader>
           <DialogTitle>Edit Course Title & Description</DialogTitle>
           <DialogDescription>
-            <div className="mt-3">
+            <span className="mt-3">
               <label>Course Title</label>
               <Input
                 defaultValue={course?.courseOutput?.course?.name}
                 onChange={(event) => setName(event?.target.value)}
               />
-            </div>
-            <div>
+            </span>
+            <span>
               <label>Description</label>
               <Textarea
                 className="h-40"
                 defaultValue={course?.courseOutput?.course?.description}
                 onChange={(event) => setDescription(event?.target.value)}
               />
-            </div>
+            </span>
           </DialogDescription>
         </DialogHeader>
         <DialogFooter>
-          <DialogClose>
+          <DialogClose asChild>
             <Button onClick={onUpdateHandler}>Update</Button>
           </DialogClose>
         </DialogFooter>

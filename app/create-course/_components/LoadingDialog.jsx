@@ -28,14 +28,14 @@ function LoadingDialog({ loading }) {
 
   return (
     <AlertDialog open={loading}>
-      <AlertDialogTitle>Loading...</AlertDialogTitle>
+      <AlertDialogTitle className="hidden">Loading...</AlertDialogTitle>
       <AlertDialogContent>
         <AlertDialogHeader>
           <AlertDialogDescription>
-            <div className="flex flex-col items-center py-10">
+            <span className="flex flex-col items-center py-10">
               {loader}
               <h2>Please wait... Ai Working on your course</h2>
-            </div>
+            </span>
           </AlertDialogDescription>
         </AlertDialogHeader>
       </AlertDialogContent>
