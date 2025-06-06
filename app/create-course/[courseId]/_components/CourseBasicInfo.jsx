@@ -11,7 +11,7 @@ import { CourseList } from "@/configs/schema";
 import { eq } from "drizzle-orm";
 import Link from "next/link";
 function CourseBasicInfo({ course, refreshData, edit = true }) {
-  console.log("CourseBasicInfo/", { course });
+  // console.log("CourseBasicInfo/", { course });
   const [selectedFile, setSelectedFile] = useState();
 
   useEffect(() => {
@@ -36,7 +36,7 @@ function CourseBasicInfo({ course, refreshData, edit = true }) {
       })
       .then((resp) => {
         getDownloadURL(storageRef).then(async (downloadUrl) => {
-          console.log(downloadUrl);
+          // console.log(downloadUrl);
 
           await db
             .update(CourseList)

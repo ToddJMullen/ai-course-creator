@@ -31,7 +31,7 @@ function LoadingDialog({ loading }) {
       <AlertDialogTitle className="hidden">Loading...</AlertDialogTitle>
       <AlertDialogContent>
         <AlertDialogHeader>
-          <AlertDialogDescription>
+          <AlertDialogDescription asChild>
             <span className="flex flex-col items-center py-10">
               {loader}
               <h2>Please wait... Ai Working on your course</h2>

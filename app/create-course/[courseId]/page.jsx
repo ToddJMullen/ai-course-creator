@@ -1,6 +1,7 @@
 "use client";
 import { db } from "@/configs/db";
-import { CourseList } from "@/configs/schema";
+import { getVideos } from "@/configs/service";
+import { Chapters, CourseList } from "@/configs/schema";
 import { useUser } from "@clerk/nextjs";
 import { and, eq } from "drizzle-orm";
 import React, { use, useEffect, useState } from "react";
@@ -10,8 +11,10 @@ import CourseDetail from "./_components/CourseDetail";
 import ChapterList from "./_components/ChapterList";
 import { Button } from "@/components/ui/button";
 import { GenerateChapterContent_AI } from "@/configs/AiModel";
+import { useRouter } from "next/navigation";
 
 function CourseLayout({ params }) {
+  const router = useRouter();
   const { user } = useUser();
   const courseId = use(params).courseId;
   const [course, setCourse] = useState();
@@ -38,32 +41,57 @@ function CourseLayout({ params }) {
     setCourse(result[0]);
   };
 
-  const GenerateChapterContent = () => {
+  const GenerateChapterContent = async () => {
     console.log("GenerateChapterContent/");
     setLoading(true);
     const chapters = course.courseOutput?.course?.chapters;
     chapters.forEach(async (chapter, idx) => {
-      if (idx < 3) {
-        const PROMPT =
-          "Explain the concept in Detail on Topic:" +
-          course?.name + // user given
-          ", Chapter:" +
-          chapter?.name + // ai created
-          ", in JSON Format with list of array with field as title, description in detail, Code Example(Code field in <precode> format) if applicable";
-        console.log(PROMPT);
-        try {
-          const result = await GenerateChapterContent_AI.sendMessage(PROMPT);
-          const str = result?.response?.text();
-          const json = JSON.parse(str);
-          console.log("GenerateChapterContent/result/", { json });
-        } catch (error) {
-          setLoading(false);
-        }
+      // if (idx < 3) {
+      const PROMPT =
+        "Explain the concept in Detail on Topic:" +
+        course?.name + // user given
+        ", Chapter:" +
+        chapter?.name + // ai created
+        ", in JSON Format with list of array with field as title, description in detail, Code Example(Code field in <precode> format) if applicable";
+      console.log(PROMPT);
+      try {
+        let videoId = "";
+
+        getVideos(course?.name + ":" + chapter?.name)
+          .then((resp) => {
+            console.log("getVideos/resp", resp);
+            videoId = resp[0]?.id?.videoId;
+          })
+          .catch((err) => {
+            console.error("getVideos/err", err);
+          });
+
+        const result = await GenerateChapterContent_AI.sendMessage(PROMPT);
+        const str = result?.response?.text();
+        const json = JSON.parse(str);
+        await db.insert(Chapters).values({
+          chapterId: idx,
+          courseId: course?.courseId,
+          content: json,
+          videoId,
+        });
+
+        // console.log("GenerateChapterContent/result/", { json });
+        setLoading(false);
+      } catch (error) {
+        console.error("getVideos/error", error);
+        setLoading(false);
       }
+      // }
     });
+
+    await db.update(CourseList).set({
+      publish: true,
+    });
+    router.replace("/create-course/" + course?.courseId + "/finish");
     setTimeout(() => {
       setLoading(false);
-    }, 7000);
+    }, 1000);
   };
 
   return (

@@ -5,6 +5,8 @@ const Dashboard = () => {
   return (
     <div>
       <AddCourse />
+
+      {/* list user courses */}
     </div>
   );
 };
